@@ -1,0 +1,116 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+<TITLE>BNF for Animation Grammar</TITLE>
+</HEAD>
+<BODY>
+<H1 ALIGN=CENTER>BNF for Animation Grammar</H1>
+<H2 ALIGN=CENTER>TOKENS</H2>
+<TABLE>
+ <!-- Token -->
+ <TR>
+  <TD>
+   <PRE>
+&lt;DEFAULT&gt; TOKEN : {
+&lt;NUM: "0" | ["1"-"9"] (["0"-"9"])*&gt;
+| &lt;FLOAT: ["0"-"9"] (["0"-"9"])* ("." ["0"-"9"] (["0"-"9"])*)?&gt;
+}
+
+   </PRE>
+  </TD>
+ </TR>
+ <!-- Token -->
+ <TR>
+  <TD>
+   <PRE>
+&lt;DEFAULT&gt; TOKEN : {
+&lt;LPAR: "{"&gt;
+| &lt;RPAR: "}"&gt;
+| &lt;STRING: (["a"-"z","A"-"Z","\'","_",".","!","?","(",")","0"-"9","\u00e0","\u00f2","\u00f9","\u00e8","\u00e9","\u00ec"])+&gt;
+}
+
+   </PRE>
+  </TD>
+ </TR>
+ <!-- Token -->
+ <TR>
+  <TD>
+   <PRE>
+&lt;DEFAULT&gt; SKIP : {
+" "
+| "\t"
+| "\n"
+| "\r"
+| &lt;"//" (~["\n","\r"])* ("\n" | "\r" | "\r\n")&gt;
+| &lt;"/*" (~["*"])* "*" (~["/"] (~["*"])* "*")* "/"&gt;
+}
+
+   </PRE>
+  </TD>
+ </TR>
+</TABLE>
+<H2 ALIGN=CENTER>NON-TERMINALS</H2>
+<TABLE>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod1">Animation</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>"Animation" <A HREF="#prod2">AnimationName</A> <A HREF="#prod3">AnimationDef</A></TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod3">AnimationDef</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>"Duration:" <A HREF="#prod4">Duration</A> ( "SubAnimations" &lt;LPAR&gt; ( <A HREF="#prod5">SubAnimation</A> )+ &lt;RPAR&gt; )? "Poses" &lt;LPAR&gt; ( <A HREF="#prod6">Pose</A> )+ &lt;RPAR&gt; ( ( ";" | &lt;EOF&gt; ) )</TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod5">SubAnimation</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>"Add" "Animation" <A HREF="#prod2">AnimationName</A> "at" "frame" <A HREF="#prod7">Frame</A> <A HREF="#prod3">AnimationDef</A></TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod6">Pose</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>"Add" "Pose" <A HREF="#prod8">PoseName</A> "at" "frame" <A HREF="#prod7">Frame</A> <A HREF="#prod9">PoseDef</A></TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod9">PoseDef</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>&lt;LPAR&gt; ( <A HREF="#prod10">BoneName</A> <A HREF="#prod11">BoneDef</A> )+ &lt;RPAR&gt;</TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod10">BoneName</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>( ( "HEAD:" | "CHEST:" | "R SHOULDER:" | "L SHOULDER:" | "UPPER R ARM:" | "LOWER R ARM:" | "UPPER L ARM:" | "LOWER L ARM:" | "R HIP:" | "L HIP:" | "UPPER R LEG:" | "LOWER R LEG:" | "UPPER L LEG:" | "LOWER L LEG:" ) )</TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod11">BoneDef</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE><A HREF="#prod12">Position</A> "," <A HREF="#prod12">Position</A></TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod7">Frame</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>&lt;NUM&gt;</TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod12">Position</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>"(" &lt;FLOAT&gt; "," &lt;FLOAT&gt; "," &lt;FLOAT&gt; ")"</TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod2">AnimationName</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>( &lt;STRING&gt; )+</TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod8">PoseName</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>( &lt;STRING&gt; )+</TD>
+</TR>
+<TR>
+<TD ALIGN=RIGHT VALIGN=BASELINE><A NAME="prod4">Duration</A></TD>
+<TD ALIGN=CENTER VALIGN=BASELINE>::=</TD>
+<TD ALIGN=LEFT VALIGN=BASELINE>&lt;NUM&gt; "frames"</TD>
+</TR>
+</TABLE>
+</BODY>
+</HTML>
